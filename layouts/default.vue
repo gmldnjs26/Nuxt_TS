@@ -48,16 +48,14 @@
       </v-btn>
     </v-app-bar>
     <v-main>
-      <v-container>
-        <v-row>
-          <v-col cols="12" md="4">
-            <nuxt />
-          </v-col>
-          <v-col cols="12" md="8">
-            <nuxt />
-          </v-col>
-        </v-row>
-      </v-container>
+      <v-row>
+        <v-col cols="12" md="4">
+          <login-form></login-form>
+        </v-col>
+        <v-col cols="12" md="8">
+          <nuxt />
+        </v-col>
+      </v-row>
     </v-main>
     <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
       <v-list>
@@ -76,7 +74,12 @@
 </template>
 
 <script>
+import LoginForm from '~/components/LoginForm';
+
 export default {
+  components: {
+    LoginForm,
+  },
   data() {
     return {
       clipped: false,
