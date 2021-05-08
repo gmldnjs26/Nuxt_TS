@@ -53,6 +53,7 @@
 import { Vue, Component } from 'nuxt-property-decorator';
 import { mapState } from 'vuex';
 import FollowList from '~/components/FollowList.vue';
+Component.registerHooks(['fetch']);
 
 @Component({
   components: {
@@ -71,12 +72,10 @@ export default class Profile extends Vue {
   nickname: string = '';
   nicknameRules: Function[] = [(v: string) => !!v || '닉네임을 입력해주세요.'];
 
-  // async fetch({ store }) {
-  //   new Promise.all({
-  //     store.dispatch('users/loadFollowers', { offset: 0 });
-  //     store.dispatch('users/loadFollowings', { offset: 0 });
-  //   })
-  // },
+  async fetch() {
+    await this.$store.dispatch('users/loadFollowers', { offset: 0 });
+    await this.$store.dispatch('users/loadFollowings', { offset: 0 });
+  }
 
   onChangeNickname() {
     this.$store.dispatch('users/changeNickname', {
