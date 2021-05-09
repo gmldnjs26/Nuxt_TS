@@ -11,7 +11,8 @@ const limit = 3;
 })
 /*
  * TODO:
- * setOther, loadOther fix
+ * FIXME:
+ * setOther, loadOther
  */
 export default class Users extends VuexModule {
   public me?: User = undefined;
