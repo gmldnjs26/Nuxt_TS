@@ -39,6 +39,7 @@
 </template>
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
+import { UserStore } from '~/store';
 
 @Component({})
 export default class LoginForm extends Vue {
@@ -51,8 +52,7 @@ export default class LoginForm extends Vue {
   ];
 
   get me(): boolean {
-    // return this.$store.state.users.me;
-    return false;
+    return UserStore.me !== undefined;
   }
 
   passwordRules: Function[] = [
