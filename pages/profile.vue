@@ -73,8 +73,8 @@ export default class Profile extends Vue {
   nicknameRules: Function[] = [(v: string) => !!v || '닉네임을 입력해주세요.'];
 
   async fetch() {
-    await this.$store.dispatch('users/loadFollowers', { offset: 0 });
-    await this.$store.dispatch('users/loadFollowings', { offset: 0 });
+    await this.$store.dispatch('users/fetchFollowers', { offset: 0 });
+    await this.$store.dispatch('users/fetchFollowings', { offset: 0 });
   }
 
   onChangeNickname() {
@@ -84,13 +84,13 @@ export default class Profile extends Vue {
   }
 
   removeFollower(userId: string) {
-    this.$store.dispatch('users/removeFollower', {
+    this.$store.dispatch('users/deleteFollower', {
       userId,
     });
   }
 
   cancleFollowing(userId: string) {
-    this.$store.dispatch('users/unfollow', {
+    this.$store.dispatch('users/deleteFollowing', {
       userId,
     });
   }
