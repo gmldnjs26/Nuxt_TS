@@ -1,199 +1,245 @@
-// import Vuex, { StoreOptions } from 'vuex';
-// import { AxiosResponse } from 'axios';
+import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 // import throttle from 'lodash.throttle';
-// import { User, Post, pState } from '~/store/store.interface';
-// import AxiosService from '~/service/axios.service';
+import { $axios } from '~/utils/api';
+import { Post } from '~/store/store.interface';
 
-// const limit = 10; // 실무에서는 라맛방식으로는 안한다고 한다. 변동이 많기때문
+const limit = 10; // 실무에서는 라맛방식으로는 안한다고 한다. 변동이 많기때문
 
-// const store: StoreOptions<pState> = {
-//   state: {
-//     mainPosts: [],
-//     hasMorePost: true,
-//     imagePaths: [],
-//     errMsg: '',
-//   },
+@Module({
+  name: 'posts',
+  stateFactory: true,
+  namespaced: true,
+})
+export default class Posts extends VuexModule {
+  public mainPosts: Post[] = [];
+  public hasMorePost: boolean = true;
+  public imagePaths: string[] = [];
+  public errMsg: string = '';
 
-//   mutations: {
-//     addMainPost(state, payload) {
-//       state.mainPosts.unshift(payload); // 제일 앞으로
-//     },
-//     removeMainPost(state, payload) {
-//       const index = state.mainPosts.findIndex((v) => v.id === payload.id);
-//       state.mainPosts.splice(index, 1); // 삭제
-//     },
-//     addComment(state, payload) {
-//       const index = state.mainPosts.findIndex((v) => v.id === payload.postId);
-//       state.mainPosts[index].comments.unshift(payload);
-//     },
-//     loadComments(state, payload) {
-//       const index = state.mainPosts.findIndex((v) => v.id === payload.postId);
-//       state.mainPosts[index].comments = payload;
-//     },
-//     loadPosts(state, payload) {
-//       state.mainPosts = state.mainPosts.concat(payload);
-//       state.hasMorePost = payload.length === limit;
-//     },
-//     concatImagePaths(state, payload) {
-//       state.imagePaths = state.imagePaths.concat(payload);
-//     },
-//     removeImagePath(state, payload) {
-//       state.imagePaths.splice(payload, 1);
-//     },
-//     unlikePost(state, payload) {
-//       const index = state.mainPosts.findIndex((v) => v.id === payload.postId);
-//       const userIndex = state.mainPosts[index].Likers.findIndex(
-//         (v) => v.id === payload.userId
-//       );
-//       state.mainPosts[index].likers.splice(userIndex, 1);
-//     },
-//     likePost(state, payload) {
-//       const index = state.mainPosts.findIndex((v) => v.id === payload.postId);
-//       state.mainPosts[index].likers.push({
-//         id: payload.userId,
-//       });
-//     },
-//   },
+  @Mutation
+  addMainPost(payload: any) {
+    this.mainPosts.unshift(payload); // 제일 앞으로
+  }
 
-//   actions: {
-//     add({ commit }, payload) {
-//       AxiosService.instance
-//         .post(
-//           '/post',
-//           {
-//             content: payload.content,
-//             imagePaths: this.state.imagePaths,
-//           },
-//           {
-//             withCredentials: true,
-//           }
-//         )
-//         .then((res) => {
-//           commit('addMainPost', res.data, { root: false }); // 3번째 root인자는 index.js를 참조할지안할지
-//         })
-//         .catch((e) => {
-//           console.log(e);
-//         });
-//     },
-//     remove({ commit }, payload) {
-//       AxiosService.instance
-//         .delete(`/post/${payload.postId}`, {
-//           withCredentials: true,
-//         })
-//         .then(() => {
-//           commit('removeMainPost', payload);
-//         })
-//         .catch((err) => {
-//           console.log(err);
-//         });
-//     },
-//     addComment({ commit }, payload) {
-//       AxiosService.instance
-//         .post(
-//           `/post/${payload.postId}/comment`,
-//           {
-//             content: payload.content,
-//           },
-//           {
-//             withCredentials: true,
-//           }
-//         )
-//         .then((res) => {
-//           commit('addComment', res.data);
-//         })
-//         .catch((err) => {
-//           console.log(err);
-//         });
-//     },
-//     loadComments({ commit, state }, payload) {
-//       AxiosService.instance
-//         .get(`/post/${payload.postId}/comments`)
-//         .then((res) => {
-//           commit('loadComments', res.data);
-//         })
-//         .catch((err) => {
-//           state.errMsg = err;
-//         });
-//     },
-//     loadPosts: throttle(async function ({ commit, state }) {
-//       if (state.hasMorePost) {
-//         try {
-//           const lastPost = state.mainPosts[state.mainPosts.length - 1];
-//           const res = await AxiosService.instance.get(
-//             `/posts?lastId=${lastPost && lastPost.id}&limit=${limit}`
-//           );
-//           commit('loadPosts', res.data);
-//           return;
-//         } catch (error) {
-//           console.log('Axios Error');
-//         }
-//       }
-//     }, 300),
-//     uploadImages({ commit }, payload) {
-//       AxiosService.instance
-//         .post('/post/images', payload, {
-//           withCredentials: true,
-//         })
-//         .then((res) => {
-//           commit('concatImagePaths', res.data);
-//         })
-//         .catch((e) => {
-//           console.log(e);
-//         });
-//     },
-//     retweet({ commit }, payload) {
-//       AxiosService.instance
-//         .post(
-//           `/post/${payload.postId}/retweet`,
-//           {},
-//           {
-//             withCredentials: true,
-//           }
-//         )
-//         .then((res) => {
-//           commit('addMainPost', res.data);
-//         })
-//         .catch((err) => {
-//           console.error(err);
-//           alert(err.response.data);
-//         });
-//     },
-//     likePost({ commit }, payload) {
-//       AxiosService.instance
-//         .post(
-//           `/post/${payload.postId}/like`,
-//           {},
-//           {
-//             withCredentials: true,
-//           }
-//         )
-//         .then((res) => {
-//           commit('likePost', {
-//             userId: res.data.userId,
-//             postId: payload.postId,
-//           });
-//         })
-//         .catch((err) => {
-//           console.error(err);
-//         });
-//     },
-//     unlikePost({ commit }, payload) {
-//       AxiosService.instance
-//         .delete(`/post/${payload.postId}/like`, {
-//           withCredentials: true,
-//         })
-//         .then((res) => {
-//           console.log('unlikePost');
-//           commit('unlikePost', {
-//             userId: res.data.userId,
-//             postId: payload.postId,
-//           });
-//         })
-//         .catch((err) => {
-//           console.error(err);
-//         });
-//     },
-//   },
-// };
+  @Mutation
+  removeMainPost(payload: any) {
+    const index = this.mainPosts.findIndex((v) => v.id === payload.id);
+    this.mainPosts.splice(index, 1); // 삭제
+  }
 
-// export default new Vuex.Store(store);
+  @Mutation
+  addComment(payload: any) {
+    const index = this.mainPosts.findIndex((v) => v.id === payload.postId);
+    this.mainPosts[index].comments.unshift(payload);
+  }
+
+  @Mutation
+  loadComments(payload: any) {
+    const index = this.mainPosts.findIndex((v) => v.id === payload.postId);
+    this.mainPosts[index].comments = payload;
+  }
+
+  @Mutation
+  loadPosts(payload: any) {
+    this.mainPosts = this.mainPosts.concat(payload);
+    this.hasMorePost = payload.length === limit;
+  }
+
+  @Mutation
+  concatImagePaths(payload: any) {
+    this.imagePaths = this.imagePaths.concat(payload);
+  }
+
+  @Mutation
+  removeImagePath(payload: any) {
+    this.imagePaths.splice(payload, 1);
+  }
+
+  @Mutation
+  unlikePost(payload: any) {
+    const index = this.mainPosts.findIndex((v) => v.id === payload.postId);
+    const userIndex = this.mainPosts[index].likers.findIndex(
+      (v) => v.id === payload.userId
+    );
+    this.mainPosts[index].likers.splice(userIndex, 1);
+  }
+
+  @Mutation
+  likePost(payload: any) {
+    const index = this.mainPosts.findIndex((v) => v.id === payload.postId);
+    this.mainPosts[index].likers.push({
+      id: payload.userId,
+    });
+  }
+
+  @Action({ rawError: true })
+  add(payload: any) {
+    $axios
+      .post(
+        '/post',
+        {
+          content: payload.content,
+          imagePaths: this.imagePaths,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        this.addMainPost(res.data); // 3번째 root인자는 index.js를 참조할지안할지
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  @Action({ rawError: true })
+  remove(payload: any) {
+    $axios
+      .delete(`/post/${payload.postId}`, {
+        withCredentials: true,
+      })
+      .then(() => {
+        this.removeMainPost(payload);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  /**
+   * TODO: addComment -> regComment
+   */
+  @Action({ rawError: true })
+  regComment(payload: any) {
+    $axios
+      .post(
+        `/post/${payload.postId}/comment`,
+        {
+          content: payload.content,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        this.addComment(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  /**
+   * :TODO: loadComments -> fetchComments로 바꿈
+   */
+  @Action({ rawError: true })
+  fetchComments(payload: any) {
+    $axios
+      .get(`/post/${payload.postId}/comments`)
+      .then((res) => {
+        this.loadComments(res.data);
+      })
+      .catch((err) => {
+        this.errMsg = err;
+      });
+  }
+
+  /**
+   * :TODO:throttle 적용시키기,
+   *       loadPosts -> fetchPosts로 바꿈
+   */
+  @Action({ rawError: true })
+  fetchPosts() {
+    if (this.hasMorePost) {
+      try {
+        const lastPost = this.mainPosts[this.mainPosts.length - 1];
+        const res = await $axios.get(
+          `/posts?lastId=${lastPost && lastPost.id}&limit=${limit}`
+        );
+        this.loadPosts(res.data);
+        return;
+      } catch (error) {
+        console.log('Axios Error');
+      }
+    }
+  }
+
+  @Action({ rawError: true })
+  uploadImages(payload: any) {
+    $axios
+      .post('/post/images', payload, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        this.concatImagePaths(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  @Action({ rawError: true })
+  retweet(payload: any) {
+    $axios
+      .post(
+        `/post/${payload.postId}/retweet`,
+        {},
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        this.addMainPost(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+        alert(err.response.data);
+      });
+  }
+
+  /**
+   * TODO: likePost -> addLikePost
+   */
+  @Action({ rawError: true })
+  addLikePost(payload: any) {
+    $axios
+      .post(
+        `/post/${payload.postId}/like`,
+        {},
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        this.likePost({
+          userId: res.data.userId,
+          postId: payload.postId,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
+  /**
+   * TODO: unlikePost -> removeLikePost
+   */
+  @Action({ rawError: true })
+  removeLikePost(payload: any) {
+    $axios
+      .delete(`/post/${payload.postId}/like`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log('unlikePost');
+        this.unlikePost({
+          userId: res.data.userId,
+          postId: payload.postId,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+}
