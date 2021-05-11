@@ -154,10 +154,9 @@ export default class Posts extends VuexModule {
     if (this.hasMorePost) {
       try {
         const lastPost = this.mainPosts[this.mainPosts.length - 1];
-        const res = await $axios.get(
-          `/posts?lastId=${lastPost && lastPost.id}&limit=${limit}`
-        );
-        this.loadPosts(res.data);
+        $axios
+          .get(`/posts?lastId=${lastPost && lastPost.id}&limit=${limit}`)
+          .then((res) => this.loadPosts(res.data));
         return;
       } catch (error) {
         console.log('Axios Error');

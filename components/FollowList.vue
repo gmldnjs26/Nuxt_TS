@@ -21,21 +21,13 @@
     </v-col>
   </v-list>
 </template>
-<script>
-export default {
-  props: {
-    peoples: {
-      type: Array,
-      required: true,
-    },
-    remove: {
-      type: Function,
-      required: true,
-    },
-  },
-  mounted() {
-    console.log(this.peoples);
-  },
-};
+<script lang="ts">
+import { Vue, Component, Prop } from 'nuxt-property-decorator';
+
+@Component({})
+export default class FollowList extends Vue {
+  @Prop() readonly peoples!: Array<object>;
+  @Prop() readonly remove!: Function;
+}
 </script>
 <style></style>

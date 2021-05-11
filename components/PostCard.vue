@@ -4,7 +4,7 @@
     <v-card-text>
       <div>
         <h3>Gwakheewon</h3>
-        <div>안녕하세영 게시글 목록~</div>
+        <div>안녕하세영 {{ myNickname }}게시글 목록~</div>
       </div>
     </v-card-text>
     <v-card-actions>
@@ -25,7 +25,13 @@
 </template>
 
 <script>
-export default {};
+import { Vue } from 'nuxt-property-decorator';
+import { UserStore } from '~/store';
+export default class PostsCard extends Vue {
+  get myNickname() {
+    return UserStore.me.nickname;
+  }
+}
 </script>
 
 <style></style>

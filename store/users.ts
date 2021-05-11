@@ -4,6 +4,14 @@ import { bUser, User } from '~/store/store.interface';
 
 const limit = 3;
 
+const meTest = {
+  id: 'imleesky@naver.com',
+  nickname: 'heewon',
+  followings: [],
+  followers: [],
+  posts: [],
+};
+
 @Module({
   name: 'users',
   stateFactory: true,
@@ -15,7 +23,7 @@ const limit = 3;
  * setOther, loadOther
  */
 export default class Users extends VuexModule {
-  public me?: User = undefined;
+  public me?: User = meTest;
   public hasMoreFollower: boolean = true;
   public hasMoreFollowing: boolean = true;
   public followerList: Array<bUser> = [];

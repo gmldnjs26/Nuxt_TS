@@ -51,26 +51,36 @@
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
-import { mapState } from 'vuex';
 import FollowList from '~/components/FollowList.vue';
+import { UserStore } from '~/store';
 Component.registerHooks(['fetch']);
 
 @Component({
   components: {
     FollowList,
   },
-  computed: mapState([
-    'users/followerList',
-    'users/followingList',
-    'users/hasMoreFollowing',
-    'users/hasMoreFollower',
-  ]),
 })
 export default class Profile extends Vue {
   // middleware: 'authenticated',
   valid: boolean = false;
   nickname: string = '';
   nicknameRules: Function[] = [(v: string) => !!v || '닉네임을 입력해주세요.'];
+
+  get following() {
+    return UserStore.followingList;
+  }
+
+  get follower() {
+    return UserStore.followerList;
+  }
+
+  get hasMoreFollowing() {
+    return UserStore.hasMoreFollowing;
+  }
+
+  get hasMoreFollower() {
+    return UserStore.hasMoreFollower;
+  }
 
   async fetch() {
     await this.$store.dispatch('users/fetchFollowers', { offset: 0 });
