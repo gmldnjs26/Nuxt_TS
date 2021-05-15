@@ -46,11 +46,9 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from 'nuxt-property-decorator';
-import { mapState } from 'vuex';
+import { UserStore } from '~/store';
 
-@Component({
-  computed: mapState(['users/me']),
-})
+@Component({})
 export default class SignUp extends Vue {
   valid: boolean = false;
   email: string = '';
@@ -58,6 +56,11 @@ export default class SignUp extends Vue {
   passwordCheck: string = '';
   nickname: string = '';
   terms: boolean = false;
+
+  get me() {
+    return UserStore.me;
+  }
+
   emailRules: Function[] = [
     (v: string) => !!v || '이메일은 필수입니다.',
     (v: string) => /.+@.+/.test(v) || '이메일이 유효하지 않습니다.',
@@ -70,11 +73,7 @@ export default class SignUp extends Vue {
     (v: string) => v === this.password || '비밀번호가 일치하지 않습니다.',
   ];
 
-  // get me() {
-  //   return this.$store.state.users.me;
-  // }
-
-  @Watch('this.me')
+  @Watch('me')
   meUpdate(value: boolean) {
     // 값의 변경이 있을경우 value에 값이 들어온다.
     if (value) {

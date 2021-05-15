@@ -24,12 +24,16 @@
   </v-card>
 </template>
 
-<script>
-import { Vue } from 'nuxt-property-decorator';
+<script lang="ts">
+import { Vue, Component } from 'nuxt-property-decorator';
 import { UserStore } from '~/store';
+
+@Component({
+  components: {},
+})
 export default class PostsCard extends Vue {
-  get myNickname() {
-    return UserStore.me.nickname;
+  get me() {
+    return UserStore.me;
   }
 }
 </script>

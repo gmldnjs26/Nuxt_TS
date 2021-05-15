@@ -51,10 +51,9 @@
   </v-card>
 </template>
 <script lang="ts">
-import { Vue, Component } from 'nuxt-property-decorator';
+import { Vue } from 'nuxt-property-decorator';
 import { UserStore, PostStore } from '~/store';
 
-@Component({})
 export default class PostForm extends Vue {
   hideDetails: boolean = true;
   successMessages: string = '';
