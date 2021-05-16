@@ -29,9 +29,9 @@
         {{ me.nickname }}로그인되었습니다.
         <v-btn @click="onLogOut">로그아웃</v-btn>
         <v-row>
-          <v-col cols="4"> 팔로잉: {{ me.Followings.length }}</v-col>
-          <v-col cols="4"> 팔로워: {{ me.Followers.length }}</v-col>
-          <v-col cols="4"> 게시글: {{ me.Posts.length }}</v-col>
+          <v-col cols="4"> 팔로잉: {{ me.Followings }}</v-col>
+          <v-col cols="4"> 팔로워: {{ me.Followers }}</v-col>
+          <v-col cols="4"> 게시글: {{ me.Posts }}</v-col>
         </v-row>
       </v-container>
     </v-card>
