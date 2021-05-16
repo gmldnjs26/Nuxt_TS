@@ -51,9 +51,10 @@
   </v-card>
 </template>
 <script lang="ts">
-import { Vue } from 'nuxt-property-decorator';
+import { Component, Vue } from 'nuxt-property-decorator';
 import { UserStore, PostStore } from '~/store';
 
+@Component({})
 export default class PostForm extends Vue {
   hideDetails: boolean = true;
   successMessages: string = '';
@@ -77,10 +78,9 @@ export default class PostForm extends Vue {
 
   onSubmitForm() {
     if ((this.$refs.form as Vue & { validate: () => boolean }).validate()) {
-      this.$store
-        .dispatch('posts/add', {
-          content: this.content,
-        })
+      PostStore.add({
+        content: this.content,
+      })
         .then(() => {
           this.content = '';
           this.hideDetails = false;
