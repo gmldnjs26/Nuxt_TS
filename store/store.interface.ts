@@ -21,8 +21,9 @@ export interface User {
 export interface Post {
   id: number;
   user: bUser;
-  likers: bUser[];
-  image: string;
-  retweet: Post;
-  comments: string[];
+  content: string;
+  likers?: bUser[];
+  image?: string;
+  retweet?: Post;
+  comments?: Array<any>;
 }

@@ -1,7 +1,7 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 // import throttle from 'lodash.throttle';
 import { $axios } from '~/utils/api';
-import { Post } from '~/store/store.interface';
+import { bUser, Post } from '~/store/store.interface';
 
 const limit = 10; // 실무에서는 라맛방식으로는 안한다고 한다. 변동이 많기때문
 
@@ -11,7 +11,53 @@ const limit = 10; // 실무에서는 라맛방식으로는 안한다고 한다. 
   namespaced: true,
 })
 export default class Posts extends VuexModule {
-  public mainPosts: Post[] = [];
+  public mainPosts: Post[] = [
+    {
+      id: 1,
+      user: {
+        nickname: 'heewon',
+        id: 'imleesky@naver.com',
+      },
+      content: '테스트 내용 13232323',
+      likers: [],
+      image: '',
+      retweet: undefined,
+      comments: [
+        {
+          user: {
+            nickname: 'heewon',
+            id: 'imleesky@naver.com',
+          },
+          content: 'comments test',
+        },
+      ],
+    },
+    {
+      id: 2,
+      user: {
+        nickname: 'heewon',
+        id: 'imleesky@naver.com',
+      },
+      content: '테스트 내용 2',
+      likers: [],
+      image: '',
+      retweet: undefined,
+      comments: [],
+    },
+    {
+      id: 3,
+      user: {
+        nickname: 'heewon',
+        id: 'imleesky@naver.com',
+      },
+      content: '테스트 내용 3',
+      likers: [],
+      image: '',
+      retweet: undefined,
+      comments: [],
+    },
+  ];
+
   public hasMorePost: boolean = true;
   public imagePaths: string[] = [];
   public errMsg: string = '';
@@ -30,7 +76,7 @@ export default class Posts extends VuexModule {
   @Mutation
   addComment(payload: any) {
     const index = this.mainPosts.findIndex((v) => v.id === payload.postId);
-    this.mainPosts[index].comments.unshift(payload);
+    (this.mainPosts[index].comments as Array<string>).unshift(payload);
   }
 
   @Mutation
@@ -58,23 +104,23 @@ export default class Posts extends VuexModule {
   @Mutation
   unlikePost(payload: any) {
     const index = this.mainPosts.findIndex((v) => v.id === payload.postId);
-    const userIndex = this.mainPosts[index].likers.findIndex(
+    const userIndex = (this.mainPosts[index].likers as Array<bUser>).findIndex(
       (v) => v.id === payload.userId
     );
-    this.mainPosts[index].likers.splice(userIndex, 1);
+    (this.mainPosts[index].likers as Array<bUser>).splice(userIndex, 1);
   }
 
   @Mutation
   likePost(payload: any) {
     const index = this.mainPosts.findIndex((v) => v.id === payload.postId);
-    this.mainPosts[index].likers.push({
+    (this.mainPosts[index].likers as Array<bUser>).push({
       id: payload.userId,
     });
   }
 
   @Action({ rawError: true })
   add(payload: any) {
-    $axios
+    return $axios
       .post(
         '/post',
         {
