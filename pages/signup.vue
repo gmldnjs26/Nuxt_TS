@@ -50,12 +50,12 @@ import { UserStore } from '~/store';
 
 @Component({})
 export default class SignUp extends Vue {
-  valid: boolean = false;
-  email: string = '';
-  password: string = '';
-  passwordCheck: string = '';
-  nickname: string = '';
-  terms: boolean = false;
+  public valid: boolean = false;
+  public email: string = '';
+  public password: string = '';
+  public passwordCheck: string = '';
+  public nickname: string = '';
+  public terms: boolean = false;
 
   get me() {
     return UserStore.me;
@@ -68,10 +68,12 @@ export default class SignUp extends Vue {
 
   nicknameRules: Function[] = [(v: string) => !!v || '닉네임은 필수입니다.'];
   passwordRules: Function[] = [(v: string) => !!v || '패스워드는 필수입니다.'];
-  passwordCheckRules: Function[] = [
-    (v: string) => !!v || '패스워드확인은 필수입니다.',
-    (v: string) => v === this.password || '비밀번호가 일치하지 않습니다.',
-  ];
+  get passwordCheckRules(): Function[] {
+    return [
+      (v: string) => !!v || '패스워드확인은 필수입니다.',
+      (v: string) => v === this.password || this.password + '비밀번호가 일치하지 않습니다.',
+    ];
+  }
 
   @Watch('me')
   meUpdate(value: boolean) {
@@ -84,7 +86,8 @@ export default class SignUp extends Vue {
   }
 
   onSubmitForm(): void {
-    if ((this.$refs.form as Vue & { validate: () => boolean }).validate()) {
+    console.log('methods execute');
+      if ((this.$refs.form as Vue & { validate: () => boolean }).validate()) {
       this.$store
         .dispatch('users/signUp', {
           // dispatch 자체가 Promise

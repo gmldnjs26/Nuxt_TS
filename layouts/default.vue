@@ -82,9 +82,9 @@ export default {
   },
   data() {
     return {
-      clipped: false,
+      clipped: true,
       drawer: false,
-      fixed: false,
+      fixed: true,
       items: [
         {
           icon: 'mdi-apps',
@@ -94,7 +94,7 @@ export default {
         {
           icon: 'mdi-account-details',
           title: 'Mypage',
-          to: '/mypage',
+          to: '/profile',
         },
         {
           icon: 'mdi-account-multiple-plus',

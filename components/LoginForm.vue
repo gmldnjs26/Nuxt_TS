@@ -61,7 +61,7 @@ export default class LoginForm extends Vue {
 
   onSubmitForm(): void {
     if ((this.$refs.form as Vue & { validate: () => boolean }).validate()) {
-      this.$store.dispatch('users/logIn', {
+      UserStore.logIn({
         email: this.email,
         password: this.password,
       });

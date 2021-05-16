@@ -4,7 +4,7 @@ import { NuxtAxiosInstance } from '@nuxtjs/axios';
 let $axios: NuxtAxiosInstance;
 
 export function initializeAxios(axiosInstance: NuxtAxiosInstance) {
-  axiosInstance.setBaseURL('http://localhost:3080');
+  axiosInstance.setBaseURL('http://localhost:3087');
   $axios = axiosInstance;
 }
 

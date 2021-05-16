@@ -23,7 +23,7 @@ const meTest = {
  * setOther, loadOther
  */
 export default class Users extends VuexModule {
-  public me?: User = meTest;
+  public me?: User = undefined;
   public hasMoreFollower: boolean = true;
   public hasMoreFollowing: boolean = true;
   public followerList: Array<bUser> = [];
