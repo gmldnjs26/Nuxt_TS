@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="!me">
+  <v-container v-if="me == undefined">
     <v-card>
       <v-form ref="form" v-model="valid" @submit.prevent="onSubmitForm">
         <v-container>
@@ -29,9 +29,9 @@
         {{ me.nickname }}로그인되었습니다.
         <v-btn @click="onLogOut">로그아웃</v-btn>
         <v-row>
-          <v-col cols="4"> 팔로잉: {{ me.Followings }}</v-col>
-          <v-col cols="4"> 팔로워: {{ me.Followers }}</v-col>
-          <v-col cols="4"> 게시글: {{ me.Posts }}</v-col>
+          <v-col cols="4"> 팔로잉: {{ me.Followings.length }}</v-col>
+          <v-col cols="4"> 팔로워: {{ me.Followers.length }}</v-col>
+          <v-col cols="4"> 게시글: {{ me.Posts.length }}</v-col>
         </v-row>
       </v-container>
     </v-card>
@@ -40,6 +40,7 @@
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
 import { UserStore } from '~/store';
+import { User } from '~/store/store.interface';
 
 @Component({})
 export default class LoginForm extends Vue {
@@ -51,8 +52,8 @@ export default class LoginForm extends Vue {
     (v: string) => /.+@.+/.test(v) || '이메일이 유효하지 않습니다.',
   ];
 
-  get me(): boolean {
-    return UserStore.me !== undefined;
+  get me(): () => User | undefined {
+    return this.$store.state.users.me; 
   }
 
   passwordRules: Function[] = [
@@ -61,7 +62,7 @@ export default class LoginForm extends Vue {
 
   onSubmitForm(): void {
     if ((this.$refs.form as Vue & { validate: () => boolean }).validate()) {
-      UserStore.logIn({
+      this.$store.dispatch('users/logIn',{
         email: this.email,
         password: this.password,
       });

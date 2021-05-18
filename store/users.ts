@@ -15,7 +15,7 @@ const meTest = {
 @Module({
   name: 'users',
   stateFactory: true,
-  namespaced: true,
+  namespaced: true, // $store.state.user.* 로 접근할 수 있게
 })
 /*
  * TODO:
@@ -33,6 +33,23 @@ export default class Users extends VuexModule {
   setMe(payload: any) {
     (this.me as User) = payload;
   }
+  public getMe() {
+    return this.me;
+  }
+  @Mutation
+  setHasMoreFollowing(payload: any) {
+    this.hasMoreFollowing = payload
+  }
+  @Mutation
+  setHasMoreFollower(payload: any) {
+    this.hasMoreFollower = payload
+  } 
+  getHasMoreFollowing() {
+    return this.hasMoreFollowing;
+  }
+  getHasMoreFollower() {
+    return this.hasMoreFollower;
+  } 
 
   // setOther(state, payload) {
   //   state.other = payload;
@@ -69,7 +86,7 @@ export default class Users extends VuexModule {
     } else {
       this.followerList = this.followerList.concat(payload.data);
     }
-    this.hasMoreFollower = payload.data.length === limit;
+    this.hasMoreFollower = (payload.data.length === limit);
   }
 
   @Mutation
@@ -79,7 +96,7 @@ export default class Users extends VuexModule {
     } else {
       this.followingList = this.followingList.concat(payload.data);
     }
-    this.hasMoreFollowing = payload.data.length === limit;
+    this.hasMoreFollowing = (payload.data.length === limit);
   }
 
   @Mutation
@@ -206,6 +223,7 @@ export default class Users extends VuexModule {
 
   @Action({ rawError: true })
   fetchFollowers(payload: any) {
+    console.log("FetchFollowers")
     let offset = this.followerList.length;
     if (payload && payload.offset === 0) {
       offset = 0;
@@ -232,9 +250,10 @@ export default class Users extends VuexModule {
 
   @Action({ rawError: true })
   fetchFollowings(payload: any) {
+    console.log("FetchFollowings")
     let offset = this.followingList.length;
     if (payload && payload.offset === 0) {
-      this.hasMoreFollowing = true;
+      this.setHasMoreFollowing(true);
       offset = 0;
     }
     if (this.hasMoreFollowing) {

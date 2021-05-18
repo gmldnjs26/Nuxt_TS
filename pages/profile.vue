@@ -52,7 +52,6 @@
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
 import FollowList from '~/components/FollowList.vue';
-import { UserStore } from '~/store';
 Component.registerHooks(['fetch']);
 
 @Component({
@@ -67,19 +66,19 @@ export default class Profile extends Vue {
   nicknameRules: Function[] = [(v: string) => !!v || '닉네임을 입력해주세요.'];
 
   get following() {
-    return UserStore.followingList;
+    return this.$store.state.users.followingList;
   }
 
   get follower() {
-    return UserStore.followerList;
+    return this.$store.state.users.followerList;
   }
 
   get hasMoreFollowing() {
-    return UserStore.hasMoreFollowing;
+    return this.$store.state.hasMoreFollowing;
   }
 
   get hasMoreFollower() {
-    return UserStore.hasMoreFollower;
+    return this.$store.state.hasMoreFollower;
   }
 
   async fetch() {
