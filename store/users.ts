@@ -33,9 +33,6 @@ export default class Users extends VuexModule {
   setMe(payload: any) {
     (this.me as User) = payload;
   }
-  public getMe() {
-    return this.me;
-  }
   @Mutation
   setHasMoreFollowing(payload: any) {
     this.hasMoreFollowing = payload
@@ -43,12 +40,6 @@ export default class Users extends VuexModule {
   @Mutation
   setHasMoreFollower(payload: any) {
     this.hasMoreFollower = payload
-  } 
-  getHasMoreFollowing() {
-    return this.hasMoreFollowing;
-  }
-  getHasMoreFollower() {
-    return this.hasMoreFollower;
   } 
 
   // setOther(state, payload) {
