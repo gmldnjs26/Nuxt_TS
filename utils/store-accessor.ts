@@ -8,8 +8,9 @@ let UserStore: Users;
 let PostStore: Posts;
 
 function initialiseStores(store: Store<any>): void {
-  UserStore = getModule(Users, store); // 추가
-  PostStore = getModule(Posts, store);
+	console.log('@@@@@@@@@@@@--InitialiseStores--@@@@@@@@@@@@@@');
+	UserStore = getModule(Users, store); // 추가
+	PostStore = getModule(Posts, store);
 }
 
 export { initialiseStores, UserStore, PostStore };
