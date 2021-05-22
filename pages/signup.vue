@@ -46,7 +46,6 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from 'nuxt-property-decorator';
-import { UserStore } from '~/store';
 
 @Component({})
 export default class SignUp extends Vue {
@@ -58,7 +57,7 @@ export default class SignUp extends Vue {
   public terms: boolean = false;
 
   get me() {
-    return UserStore.me;
+    return this.$store.state.users.me;
   }
 
   emailRules: Function[] = [
@@ -80,7 +79,7 @@ export default class SignUp extends Vue {
     // 값의 변경이 있을경우 value에 값이 들어온다.
     if (value) {
       this.$router.push({
-        path: '/',
+        path: '/'
       });
     }
   }
