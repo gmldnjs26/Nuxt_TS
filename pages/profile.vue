@@ -15,7 +15,7 @@
 			<v-card style="margin: 10px 0">
 				<v-container>
 					<v-subheader>팔로잉</v-subheader>
-					<follow-list :peoples="following" :remove="cancleFollowing" />
+					<follow-list :peoples="following" :remove="removeFollowing" />
 					<v-btn
 						v-if="hasMoreFollowing"
 						dark
@@ -53,6 +53,7 @@ Component.registerHooks(['fetch']);
 	components: {
 		FollowList,
 	},
+	middleware: ['authenticated'],
 })
 export default class Profile extends Vue {
 	// middleware: 'authenticated',
@@ -93,7 +94,7 @@ export default class Profile extends Vue {
 		});
 	}
 
-	cancleFollowing(userId: string) {
+	removeFollowing(userId: string) {
 		this.$store.dispatch('users/deleteFollowing', {
 			userId,
 		});
