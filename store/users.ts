@@ -139,7 +139,7 @@ export default class Users extends VuexModule {
 
 	@Action({ rawError: true })
 	logIn(payload: any) {
-		$axios
+		return $axios
 			.post(
 				'/user/login',
 				{
@@ -160,7 +160,7 @@ export default class Users extends VuexModule {
 
 	@Action({ rawError: true })
 	logOut() {
-		$axios
+		return $axios
 			.post('/user/logout', {}, { withCredentials: true })
 			.then(() => {
 				this.setMe(undefined);
@@ -172,26 +172,10 @@ export default class Users extends VuexModule {
 
 	@Action({ rawError: true })
 	changeNickname(payload: any) {
-		$axios
+		return $axios
 			.patch(`/user/nickname`, { nickname: payload.nickname }, { withCredentials: true })
 			.then(res => {
 				this.setNickname(res.data);
-			})
-			.catch(err => {
-				console.error(err);
-			});
-	}
-
-	@Action({ rawError: true })
-	deleteFollower(payload: any) {
-		return $axios
-			.delete(`/user/${payload.userId}/follower`, {
-				withCredentials: true,
-			})
-			.then(() => {
-				this.removeFollower({
-					userId: payload.userId,
-				});
 			})
 			.catch(err => {
 				console.error(err);
@@ -248,7 +232,7 @@ export default class Users extends VuexModule {
 
 	@Action({ rawError: true })
 	follow(payload: any) {
-		$axios
+		return $axios
 			.post(
 				`/user/${payload.userId}/follow`,
 				{},
@@ -268,13 +252,29 @@ export default class Users extends VuexModule {
 
 	@Action({ rawError: true })
 	deleteFollowing(payload: any) {
-		$axios
+		return $axios
 			.delete(`/user/${payload.userId}/following`, {
 				withCredentials: true,
 			})
 			.then(res => {
 				this.removeFollowing({
 					userId: res.data,
+				});
+			})
+			.catch(err => {
+				console.error(err);
+			});
+	}
+
+	@Action({ rawError: true })
+	deleteFollower(payload: any) {
+		return $axios
+			.delete(`/user/${payload.userId}/follower`, {
+				withCredentials: true,
+			})
+			.then(() => {
+				this.removeFollower({
+					userId: payload.userId,
 				});
 			})
 			.catch(err => {

@@ -11,53 +11,7 @@ const limit = 10; // 실무에서는 라맛방식으로는 안한다고 한다. 
 	namespaced: true,
 })
 export default class Posts extends VuexModule {
-	public mainPosts: Post[] = [
-		{
-			id: 1,
-			user: {
-				nickname: 'heewon',
-				id: 'imleesky@naver.com',
-			},
-			content: '테스트 내용 1',
-			likers: [],
-			image: '',
-			retweet: undefined,
-			comments: [
-				{
-					user: {
-						nickname: 'heewon',
-						id: 'imleesky@naver.com',
-					},
-					content: 'comments test',
-				},
-			],
-		},
-		{
-			id: 2,
-			user: {
-				nickname: 'heewon',
-				id: 'imleesky@naver.com',
-			},
-			content: '테스트 내용 2',
-			likers: [],
-			image: '',
-			retweet: undefined,
-			comments: [],
-		},
-		{
-			id: 3,
-			user: {
-				nickname: 'heewon',
-				id: 'imleesky@naver.com',
-			},
-			content: '테스트 내용 3',
-			likers: [],
-			image: '',
-			retweet: undefined,
-			comments: [],
-		},
-	];
-
+	public mainPosts: Post[] = [];
 	public hasMorePost: boolean = true;
 	public imagePaths: string[] = [];
 	public errMsg: string = '';
@@ -141,7 +95,7 @@ export default class Posts extends VuexModule {
 
 	@Action({ rawError: true })
 	remove(payload: any) {
-		$axios
+		return $axios
 			.delete(`/post/${payload.postId}`, {
 				withCredentials: true,
 			})
@@ -158,7 +112,7 @@ export default class Posts extends VuexModule {
 	 */
 	@Action({ rawError: true })
 	regComment(payload: any) {
-		$axios
+		return $axios
 			.post(
 				`/post/${payload.postId}/comment`,
 				{
@@ -181,7 +135,7 @@ export default class Posts extends VuexModule {
 	 */
 	@Action({ rawError: true })
 	fetchComments(payload: any) {
-		$axios
+		return $axios
 			.get(`/post/${payload.postId}/comments`)
 			.then(res => {
 				this.loadComments(res.data);
@@ -200,10 +154,9 @@ export default class Posts extends VuexModule {
 		if (this.hasMorePost) {
 			try {
 				const lastPost = this.mainPosts[this.mainPosts.length - 1];
-				$axios
+				return $axios
 					.get(`/posts?lastId=${lastPost && lastPost.id}&limit=${limit}`)
 					.then(res => this.loadPosts(res.data));
-				return;
 			} catch (error) {
 				console.log('Axios Error');
 			}
@@ -212,7 +165,7 @@ export default class Posts extends VuexModule {
 
 	@Action({ rawError: true })
 	uploadImages(payload: any) {
-		$axios
+		return $axios
 			.post('/post/images', payload, {
 				withCredentials: true,
 			})
@@ -226,7 +179,7 @@ export default class Posts extends VuexModule {
 
 	@Action({ rawError: true })
 	retweet(payload: any) {
-		$axios
+		return $axios
 			.post(
 				`/post/${payload.postId}/retweet`,
 				{},
@@ -248,7 +201,7 @@ export default class Posts extends VuexModule {
 	 */
 	@Action({ rawError: true })
 	addLikePost(payload: any) {
-		$axios
+		return $axios
 			.post(
 				`/post/${payload.postId}/like`,
 				{},
@@ -272,7 +225,7 @@ export default class Posts extends VuexModule {
 	 */
 	@Action({ rawError: true })
 	removeLikePost(payload: any) {
-		$axios
+		return $axios
 			.delete(`/post/${payload.postId}/like`, {
 				withCredentials: true,
 			})

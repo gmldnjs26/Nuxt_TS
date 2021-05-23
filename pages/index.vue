@@ -12,6 +12,7 @@ import { Component, Vue } from 'nuxt-property-decorator';
 import Logo from '~/components/Logo.vue';
 import PostCard from '~/components/PostCard.vue';
 import PostForm from '~/components/PostForm.vue';
+Component.registerHooks(['fetch']);
 
 @Component({
 	components: {
@@ -23,6 +24,10 @@ import PostForm from '~/components/PostForm.vue';
 export default class extends Vue {
 	get me() {
 		return this.$store.state.users.me;
+	}
+
+	async fetch() {
+		await this.$store.dispatch('posts/fetchPosts', { offset: 0 });
 	}
 
 	get mainPosts() {
