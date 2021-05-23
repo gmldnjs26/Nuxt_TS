@@ -4,7 +4,7 @@
 			<v-img></v-img>
 			<v-card-text>
 				<div>
-					<h3>{{ post.user.nickname }}</h3>
+					<h3>{{ post.User.nickname }}</h3>
 					<div>{{ post.content }}</div>
 				</div>
 			</v-card-text>
