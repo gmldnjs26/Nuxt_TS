@@ -42,6 +42,7 @@ export default class Posts extends VuexModule {
 	@Mutation
 	loadPosts(payload: any) {
 		this.mainPosts = this.mainPosts.concat(payload);
+		console.log(this.mainPosts);
 		this.hasMorePost = payload.length === limit;
 	}
 

@@ -40,7 +40,7 @@ export default class CommentForm extends Vue {
 	onSubmitForm() {
 		if ((this.$refs.form as Vue & { validate: () => boolean }).validate()) {
 			this.$store
-				.dispatch('posts/addComment', {
+				.dispatch('posts/regComment', {
 					postId: this.postId,
 					content: this.content,
 				})
