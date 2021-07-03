@@ -85,7 +85,7 @@ export default class PostForm extends Vue {
 	}
 
 	onRemoveImage(index: number) {
-		this.$store.commit('posts/removeImagePath', index);
+		this.$store.dispatch('posts/removeImage', index);
 	}
 }
 </script>

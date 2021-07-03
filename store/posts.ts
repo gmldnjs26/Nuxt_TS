@@ -240,4 +240,20 @@ export default class Posts extends VuexModule {
 				console.error(err);
 			});
 	}
+
+	@Action({ rawError: true })
+	removeImage(payload: number) {
+		const name = this.imagePaths[payload];
+		return $axios
+			.delete(`/post/${name}/images`, {
+				withCredentials: true,
+			})
+			.then(res => {
+				this.removeImagePath(payload);
+				console.log(res);
+			})
+			.catch(err => {
+				console.error(err);
+			});
+	}
 }
