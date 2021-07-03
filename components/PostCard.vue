@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<v-card>
-			<v-img></v-img>
+			<PostImages :images="post.Images"></PostImages>
 			<v-card-text>
 				<div>
 					<h3>{{ post.User.nickname }}</h3>
@@ -52,7 +52,9 @@
 import { Vue, Component, Prop } from 'nuxt-property-decorator';
 import { Post } from '~/store/store.interface';
 @Component({
-	components: {},
+	components: {
+		PostImages: () => import('~/components/PostImages.vue'),
+	},
 })
 export default class PostCard extends Vue {
 	@Prop() readonly post!: Post;
