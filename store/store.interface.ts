@@ -23,7 +23,7 @@ export interface Post {
 	user: bUser;
 	content: string;
 	likers?: bUser[];
-	image?: string;
+	images?: Array<any>;
 	retweet?: Post;
 	comments?: Array<any>;
 }

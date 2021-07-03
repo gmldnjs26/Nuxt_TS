@@ -207,7 +207,6 @@ export default class Users extends VuexModule {
 
 	@Action({ rawError: true })
 	fetchFollowings(payload: any) {
-		console.log('FetchFollowings');
 		let offset = this.followingList.length;
 		if (payload && payload.offset === 0) {
 			this.setHasMoreFollowing(true);

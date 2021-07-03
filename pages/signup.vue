@@ -81,7 +81,6 @@ export default class SignUp extends Vue {
 	}
 
 	onSubmitForm(): void {
-		console.log('methods execute');
 		if ((this.$refs.form as Vue & { validate: () => boolean }).validate()) {
 			this.$store
 				.dispatch('users/signUp', {
