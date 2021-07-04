@@ -32,7 +32,7 @@ export default class extends Vue {
 	}
 
 	get mainPosts() {
-		return this.$store.state.posts.mainPosts;
+		return PostStore.getMainPosts;
 	}
 }
 </script>

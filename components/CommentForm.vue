@@ -14,6 +14,7 @@
 </template>
 <script lang="ts">
 import { Vue, Component, Prop } from 'nuxt-property-decorator';
+import { UserStore, PostStore } from '~/store';
 
 @Component({})
 export default class CommentForm extends Vue {
@@ -26,7 +27,7 @@ export default class CommentForm extends Vue {
 	hideDetails: Boolean = true;
 
 	get me() {
-		return this.$store.state.users.me;
+		return UserStore.getMe;
 	}
 
 	onChangeTextarea(value: string) {
@@ -39,17 +40,15 @@ export default class CommentForm extends Vue {
 
 	onSubmitForm() {
 		if ((this.$refs.form as Vue & { validate: () => boolean }).validate()) {
-			this.$store
-				.dispatch('posts/regComment', {
-					postId: this.postId,
-					content: this.content,
-				})
-				.then(() => {
-					this.content = '';
-					this.success = true;
-					this.successMessages = '댓글이 작성되었습니다.';
-					this.hideDetails = false;
-				});
+			PostStore.regComment({
+				postId: this.postId,
+				content: this.content,
+			}).then(() => {
+				this.content = '';
+				this.success = true;
+				this.successMessages = '댓글이 작성되었습니다.';
+				this.hideDetails = false;
+			});
 		}
 	}
 }
