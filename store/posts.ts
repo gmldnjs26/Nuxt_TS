@@ -23,7 +23,7 @@ export default class Posts extends VuexModule {
 
 	@Mutation
 	removeMainPost(payload: any) {
-		const index = this.mainPosts.findIndex(v => v.id === payload.id);
+		const index = this.mainPosts.findIndex(v => v.id === payload.postId);
 		this.mainPosts.splice(index, 1); // 삭제
 	}
 
