@@ -21,6 +21,10 @@ export default class Users extends VuexModule {
 	private followerList: Array<bUser> = [];
 	private followingList: Array<bUser> = [];
 
+	get getMe(): User | undefined {
+		return this.me;
+	}
+
 	@Mutation
 	setMe(payload: User | undefined) {
 		this.me = payload;
