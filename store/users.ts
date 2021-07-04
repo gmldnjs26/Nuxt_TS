@@ -4,6 +4,14 @@ import { bUser, User } from '~/store/store.interface';
 
 const limit = 3;
 
+const defaultUserInfo = {
+	id: '',
+	nickname: '',
+	followings: [],
+	followers: [],
+	posts: [],
+};
+
 @Module({
 	name: 'users',
 	stateFactory: true,
@@ -15,18 +23,18 @@ const limit = 3;
  * setOther, loadOther
  */
 export default class Users extends VuexModule {
-	private me?: User = undefined;
+	private me: User = defaultUserInfo;
 	private hasMoreFollower: boolean = true;
 	private hasMoreFollowing: boolean = true;
 	private followerList: Array<bUser> = [];
 	private followingList: Array<bUser> = [];
 
-	get getMe(): User | undefined {
+	get getMe(): User {
 		return this.me;
 	}
 
 	@Mutation
-	setMe(payload: User | undefined) {
+	setMe(payload: User) {
 		this.me = payload;
 	}
 
@@ -167,7 +175,7 @@ export default class Users extends VuexModule {
 		return $axios
 			.post('/user/logout', {}, { withCredentials: true })
 			.then(() => {
-				this.setMe(undefined);
+				this.setMe(defaultUserInfo);
 			})
 			.catch(err => {
 				console.log(err);

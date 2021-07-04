@@ -1,6 +1,6 @@
 <template>
 	<div class="container">
-		<post-form v-if="me"></post-form>
+		<post-form v-if="me && me.id !== ''"></post-form>
 		<div>
 			<logo />
 			<post-card v-for="post in mainPosts" :key="post.id" :post="post"></post-card>

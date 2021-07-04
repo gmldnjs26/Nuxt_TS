@@ -1,5 +1,5 @@
 <template>
-	<v-container v-if="me == undefined">
+	<v-container v-if="me.id === ''">
 		<v-card>
 			<v-form ref="form" v-model="valid" @submit.prevent="onSubmitForm">
 				<v-container>
@@ -45,7 +45,7 @@ export default class LoginForm extends Vue {
 		(v: string) => /.+@.+/.test(v) || '이메일이 유효하지 않습니다.',
 	];
 
-	get me(): () => User | undefined {
+	get me(): User {
 		return this.$store.state.users.me;
 	}
 
