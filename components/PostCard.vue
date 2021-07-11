@@ -50,6 +50,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'nuxt-property-decorator';
+import { UserStore, PostStore } from '~/store';
 import { Post } from '~/store/store.interface';
 @Component({
 	components: {
@@ -62,22 +63,22 @@ export default class PostCard extends Vue {
 	commentOpened: boolean = false;
 
 	get liked() {
-		const me = this.$store.state.users.me;
+		const me = UserStore.getMe;
 		return (this.post.likers || []).find(v => v.id === (me && me.id));
 	}
 
 	get heartIcon() {
-		const me = this.$store.state.users.me;
+		const me = UserStore.getMe;
 		const liked = (this.post.likers || []).find(v => v.id === (me && me.id));
 		return liked ? 'mdi-heart' : 'mdi-heart-outline';
 	}
 
 	get me() {
-		return this.$store.state.users.me;
+		return UserStore.getMe;
 	}
 
 	onRemovePost() {
-		this.$store.dispatch('posts/remove', {
+		PostStore.remove({
 			postId: this.post.id,
 		});
 	}
@@ -88,7 +89,7 @@ export default class PostCard extends Vue {
 		if (!this.me) {
 			return alert('로그인이 필요합니다.');
 		}
-		this.$store.dispatch('posts/retweet', {
+		PostStore.retweet({
 			postId: this.post.id,
 		});
 	}
@@ -98,11 +99,11 @@ export default class PostCard extends Vue {
 			return alert('로그인이 필요합니다.');
 		}
 		if (this.liked) {
-			return this.$store.dispatch('posts/unlikePost', {
+			return PostStore.unlikePost({
 				postId: this.post.id,
 			});
 		}
-		return this.$store.dispatch('posts/likePost', {
+		return PostStore.likePost({
 			postId: this.post.id,
 		});
 	}

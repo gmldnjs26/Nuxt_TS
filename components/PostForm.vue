@@ -31,6 +31,7 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator';
+import { UserStore, PostStore } from '~/store';
 
 @Component({})
 export default class PostForm extends Vue {
@@ -41,11 +42,11 @@ export default class PostForm extends Vue {
 	valid: boolean = false;
 
 	get me() {
-		return this.$store.state.users.me;
+		return UserStore.getMe;
 	}
 
 	get imagePaths() {
-		return this.$store.state.posts.imagePaths;
+		return PostStore.getImagePaths;
 	}
 
 	onChangeTextarea() {
@@ -56,10 +57,9 @@ export default class PostForm extends Vue {
 
 	onSubmitForm() {
 		if ((this.$refs.form as Vue & { validate: () => boolean }).validate()) {
-			this.$store
-				.dispatch('posts/add', {
-					content: this.content,
-				})
+			PostStore.add({
+				content: this.content,
+			})
 				.then(() => {
 					this.content = '';
 					this.hideDetails = false;
@@ -81,11 +81,11 @@ export default class PostForm extends Vue {
 		[].forEach.call(event.target.files, f => {
 			imageFormData.append('image', f);
 		});
-		this.$store.dispatch('posts/uploadImages', imageFormData);
+		PostStore.uploadImages(imageFormData);
 	}
 
 	onRemoveImage(index: number) {
-		this.$store.dispatch('posts/removeImage', index);
+		PostStore.removeImage(index);
 	}
 }
 </script>

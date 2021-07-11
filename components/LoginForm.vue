@@ -34,6 +34,7 @@
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
 import { User } from '~/store/store.interface';
+import { UserStore } from '~/store';
 
 @Component({})
 export default class LoginForm extends Vue {
@@ -46,14 +47,14 @@ export default class LoginForm extends Vue {
 	];
 
 	get me(): User {
-		return this.$store.state.users.me;
+		return UserStore.getMe;
 	}
 
 	passwordRules: Function[] = [(v: string) => !!v || 'Password를 입력해주세요.'];
 
 	onSubmitForm(): void {
 		if ((this.$refs.form as Vue & { validate: () => boolean }).validate()) {
-			this.$store.dispatch('users/logIn', {
+			UserStore.logIn({
 				email: this.email,
 				password: this.password,
 			});
@@ -61,7 +62,7 @@ export default class LoginForm extends Vue {
 	}
 
 	onLogOut(): void {
-		this.$store.dispatch('users/logOut');
+		UserStore.logOut();
 	}
 }
 </script>

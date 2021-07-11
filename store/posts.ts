@@ -16,6 +16,14 @@ export default class Posts extends VuexModule {
 	public imagePaths: string[] = [];
 	public errMsg: string = '';
 
+	get getMainPosts(): Post[] {
+		return this.mainPosts;
+	}
+
+	get getImagePaths(): string[] {
+		return this.imagePaths;
+	}
+
 	@Mutation
 	addMainPost(payload: any) {
 		this.mainPosts.unshift(payload); // 제일 앞으로
