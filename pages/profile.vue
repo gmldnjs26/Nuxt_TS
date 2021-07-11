@@ -46,6 +46,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator';
+import { UserStore } from '~/store';
 import FollowList from '~/components/FollowList.vue';
 Component.registerHooks(['fetch']);
 
@@ -62,50 +63,50 @@ export default class Profile extends Vue {
 	nicknameRules: Function[] = [(v: string) => !!v || '닉네임을 입력해주세요.'];
 
 	get following() {
-		return this.$store.state.users.followingList;
+		return UserStore.getFollowingList;
 	}
 
 	get follower() {
-		return this.$store.state.users.followerList;
+		return UserStore.getFollowerList;
 	}
 
 	get hasMoreFollowing() {
-		return this.$store.state.hasMoreFollowing;
+		return UserStore.getHasMoreFollowing;
 	}
 
 	get hasMoreFollower() {
-		return this.$store.state.hasMoreFollower;
+		return UserStore.getHasMoreFollower;
 	}
 
 	async fetch() {
-		await this.$store.dispatch('users/fetchFollowers', { offset: 0 });
-		await this.$store.dispatch('users/fetchFollowings', { offset: 0 });
+		await UserStore.fetchFollowers({ offset: 0 });
+		await UserStore.fetchFollowings({ offset: 0 });
 	}
 
 	onChangeNickname() {
-		this.$store.dispatch('users/changeNickname', {
+		UserStore.changeNickname({
 			nickname: this.nickname,
 		});
 	}
 
 	removeFollower(userId: string) {
-		this.$store.dispatch('users/deleteFollower', {
+		UserStore.deleteFollower({
 			userId,
 		});
 	}
 
 	removeFollowing(userId: string) {
-		this.$store.dispatch('users/deleteFollowing', {
+		UserStore.deleteFollowing({
 			userId,
 		});
 	}
 
 	loadMoreFollowers() {
-		this.$store.dispatch('users/loadFollowers');
+		UserStore.loadFollowers({ offset: 0 });
 	}
 
 	loadMoreFollowings() {
-		this.$store.dispatch('users/loadFollowings');
+		UserStore.loadFollowings({ offset: 0 });
 	}
 }
 </script>

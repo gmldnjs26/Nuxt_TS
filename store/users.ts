@@ -33,6 +33,22 @@ export default class Users extends VuexModule {
 		return this.me;
 	}
 
+	get getHasMoreFollower(): boolean {
+		return this.hasMoreFollower;
+	}
+
+	get getHasMoreFollowing(): boolean {
+		return this.hasMoreFollowing;
+	}
+
+	get getFollowerList(): Array<bUser> {
+		return this.followerList;
+	}
+
+	get getFollowingList(): Array<bUser> {
+		return this.followingList;
+	}
+
 	@Mutation
 	setMe(payload: User) {
 		this.me = payload;
