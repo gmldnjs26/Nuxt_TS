@@ -23,11 +23,11 @@ const defaultUserInfo = {
  * setOther, loadOther
  */
 export default class Users extends VuexModule {
-	private me: User = defaultUserInfo;
-	private hasMoreFollower: boolean = true;
-	private hasMoreFollowing: boolean = true;
-	private followerList: Array<bUser> = [];
-	private followingList: Array<bUser> = [];
+	me: User = defaultUserInfo;
+	hasMoreFollower: boolean = true;
+	hasMoreFollowing: boolean = true;
+	followerList: Array<bUser> = [];
+	followingList: Array<bUser> = [];
 
 	get getMe(): User {
 		return this.me;

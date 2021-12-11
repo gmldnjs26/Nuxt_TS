@@ -2,6 +2,7 @@ import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 // import throttle from 'lodash.throttle';
 import { $axios } from '~/utils/api';
 import { bUser, Post } from '~/store/store.interface';
+import PostRepository from '~/repositories/post';
 
 const limit = 10; // 실무에서는 라맛방식으로는 안한다고 한다. 변동이 많기때문
 
@@ -11,10 +12,10 @@ const limit = 10; // 실무에서는 라맛방식으로는 안한다고 한다. 
 	namespaced: true,
 })
 export default class Posts extends VuexModule {
-	public mainPosts: Post[] = [];
-	public hasMorePost: boolean = true;
-	public imagePaths: string[] = [];
-	public errMsg: string = '';
+	mainPosts: Post[] = [];
+	hasMorePost: boolean = true;
+	imagePaths: string[] = [];
+	errMsg: string = '';
 
 	get getMainPosts(): Post[] {
 		return this.mainPosts;
@@ -159,16 +160,25 @@ export default class Posts extends VuexModule {
 	 */
 	@Action({ rawError: true })
 	fetchPosts() {
-		if (this.hasMorePost) {
-			try {
-				const lastPost = this.mainPosts[this.mainPosts.length - 1];
-				return $axios
-					.get(`/posts?lastId=${lastPost && lastPost.id}&limit=${limit}`)
-					.then(res => this.loadPosts(res.data));
-			} catch (error) {
-				console.log('Axios Error');
-			}
-		}
+		const postRepository = new PostRepository();
+		postRepository
+			.getPosts()
+			.then(result => {
+				console.log(result);
+			})
+			.catch(e => {
+				console.log(e);
+			});
+		// if (this.hasMorePost) {
+		// 	try {
+		// 		const lastPost = this.mainPosts[this.mainPosts.length - 1];
+		// 		return $axios
+		// 			.get(`/posts?lastId=${lastPost && lastPost.id}&limit=${limit}`)
+		// 			.then(res => this.loadPosts(res.data));
+		// 	} catch (error) {
+		// 		console.log('Axios Error');
+		// 	}
+		// }
 	}
 
 	@Action({ rawError: true })
