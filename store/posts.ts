@@ -160,25 +160,25 @@ export default class Posts extends VuexModule {
 	 */
 	@Action({ rawError: true })
 	fetchPosts() {
-		const postRepository = new PostRepository();
-		postRepository
-			.getPosts()
-			.then(result => {
-				console.log(result);
-			})
-			.catch(e => {
-				console.log(e);
-			});
-		// if (this.hasMorePost) {
-		// 	try {
-		// 		const lastPost = this.mainPosts[this.mainPosts.length - 1];
-		// 		return $axios
-		// 			.get(`/posts?lastId=${lastPost && lastPost.id}&limit=${limit}`)
-		// 			.then(res => this.loadPosts(res.data));
-		// 	} catch (error) {
-		// 		console.log('Axios Error');
-		// 	}
-		// }
+		// const postRepository = new PostRepository();
+		// postRepository
+		// 	.getPosts()
+		// 	.then(result => {
+		// 		console.log(result);
+		// 	})
+		// 	.catch(e => {
+		// 		console.log(e);
+		// 	});
+		if (this.hasMorePost) {
+			try {
+				const lastPost = this.mainPosts[this.mainPosts.length - 1];
+				return $axios
+					.get(`/posts?lastId=${lastPost && lastPost.id}&limit=${limit}`)
+					.then(res => this.loadPosts(res.data));
+			} catch (error) {
+				console.log('Axios Error');
+			}
+		}
 	}
 
 	@Action({ rawError: true })
